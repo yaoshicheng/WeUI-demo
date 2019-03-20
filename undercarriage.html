@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>配送中-下架</title>
+    <link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
+</head>
+<style>
+	.table{
+		width: 100%;
+		text-align: center;
+		border-top: 1px solid #eee;
+		border-bottom: 1px solid #eee;
+		border-collapse: collapse;
+	}
+	td, th {
+	    border: 1px solid #ddd;
+	    padding:5px;
+	}
+	.scan-box{
+		position: absolute;
+		width: 100%;
+		bottom:40px;
+		left: 0px;
+		height: 100px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+	
+	.title{
+		text-align: center;
+		font-size: 32px;
+		padding: 10px 0;
+		margin: 20px 0;
+		background: #ddd;
+	}
+	.detail_panel{
+		padding: 0 30px;
+		font-size: 18px;
+	}
+	.label{
+		color: #999;
+	}
+</style>
+<body>
+	<p class="title">配送中</p>
+    <div class="detail_panel">
+        <p><span class="label">门店名称：</span><span>威宁路</span></p>
+		<p><span class="label">设备编号：</span><span>Wj%dfjQ781A</span></p>
+		<p><span class="label">配送员：</span><span>那不行</span></p>
+    </div>
+
+	<div class="weui-cells weui-cells_form" style="margin-top: 0;">
+		<div style="display: flex;justify-content: flex-end;margin: 10px 20px 10px 0px;">
+	       	<a id="changeType" href="javascript:;" class="weui-btn_mini weui-btn_plain-primary custom-button2">
+	       		<span id="text1">切换到总数</span>
+	       	</a>
+       	</div>
+       	<div style="height: 280px;overflow-y: auto;">
+	       	<table class="table" id="table">
+	        	<thead>
+	        		<tr>
+	        			<th>商品名称</th>
+	        			<th id="text2">下架数量</th>
+	        		</tr>
+	        	</thead>
+	        	<tbody id="listbody">
+	        	</tbody>
+	        </table>
+       	</div>
+ 
+    </div>
+    
+    <div class="weui-cells weui-cells_form ctlBtn-group">
+       <div class="flex_row_20">
+	       	<a id="cancelBtn" href="javascript:;" class="weui-btn weui-btn_plain-default custom-button1">取消</a>	       	
+	       	<a id="successBtn" href="javascript:;" class="weui-btn weui-btn_plain-primary custom-button1" style="margin-top: 0px;">补货完成</a>
+       </div>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+    <script>
+    	$('#cancelBtn').on('click',()=>{
+    		window.location = "list.html"
+    	})
+    	$('#successBtn').on('click',()=>{
+    		window.location = "success.html"
+    	})
+    	$('#changeType').on('click',()=>{
+    		let text1 = $('#text1').text().trim();
+    		if(text1 === "切换到总数"){
+    			$('#text1').text("切换到下架数");
+    			$('#text2').text("总数量");
+    			$("#table tbody tr td:nth-child(2)").hide();
+    			$("#table tbody tr td:nth-child(3)").show();
+    		}else{
+    			$('#text1').text("切换到总数");
+    			$('#text2').text("下架数量");
+    			$("#table tbody tr td:nth-child(2)").hide();
+    			$("#table tbody tr td:nth-child(3)").show();
+    		}
+    	})
+    	function setList(data){
+    		if(!data){
+    			return;
+    		}
+    		let listbody = $("#listbody");
+    		let bodyHtml = ''
+    		data.map(item =>{
+    			bodyHtml += '<tr><td>'+item.goodname+'</td><td>'+item.replenishCount+'</td><td style="display:none">'+item.totalCount+'</td></tr>';
+    		})
+    		listbody.append(bodyHtml);
+    	}
+    	
+    	//测试数据，调试需删除
+    	let data = []
+    	for(let i=0;i<20;i++){
+    		data.push({
+    			goodname:'商品'+i,
+    			replenishCount:(Math.random()*100).toFixed(0),
+    			actualReplenishCount:(Math.random()*100).toFixed(0),
+    			totalCount:(Math.random()*100).toFixed(0),
+    		})
+    	}
+    	setList(data)
+    	//测试数据，调试需删除
+    </script>
+</body>
+</html>
